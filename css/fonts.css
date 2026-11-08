@@ -1,0 +1,31 @@
+/* FS Frames – self-hosted fonts (100% free, SIL OFL 1.1). No CDN, no external requests. */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url(../fonts/Inter-400.woff) format('woff')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;src:url(../fonts/Inter-500.woff) format('woff')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url(../fonts/Inter-600.woff) format('woff')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url(../fonts/Inter-700.woff) format('woff')}
+/* Noto Sans Bengali – variable font file, see fonts/README.txt (run fonts/get-bengali-font.sh once) */
+@font-face{font-family:'Noto Sans Bengali';font-style:normal;font-weight:100 900;font-display:swap;
+ src:local('Noto Sans Bengali'),url(../fonts/NotoSansBengali-Variable.woff2) format('woff2'),url(../fonts/NotoSansBengali-Variable.ttf) format('truetype');
+ unicode-range:U+0980-09FE,U+200C-200D,U+0964-0965,U+25CC}
+
+/* Shared typography: Inter for English/digits, Noto Sans Bengali for Bengali (per-glyph fallback) */
+:root{
+ --fs-sans:'Inter','Noto Sans Bengali','Bangla Sangam MN','Kohinoor Bangla','Nirmala UI','Vrinda',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+ --bn-lh:1.75;--bn-lh-head:1.5}
+html{font-kerning:normal;text-rendering:optimizeLegibility;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-feature-settings:'kern' 1,'liga' 1,'calt' 1;font-variant-ligatures:common-ligatures contextual;line-height:var(--bn-lh);overflow-wrap:break-word;word-break:normal;hyphens:none}
+/* Never letter-space Bengali – it breaks যুক্তাক্ষর / কার-ফলা joins */
+h1,h2,h3,h4,p,li,a,button,label,summary,small,span,b,strong,input,select,textarea,td,th{letter-spacing:normal}
+h1,h2,h3,h4{line-height:var(--bn-lh-head);padding-top:.04em;padding-bottom:.04em;overflow-wrap:anywhere;text-wrap:balance}
+p,li{text-wrap:pretty}
+/* Buttons / menus / tabs: room for Bengali ascenders (ে ি ী) and descenders (ু ূ ৃ ্য) */
+button,.btn,.chip,.tabs button{line-height:1.5;white-space:normal;overflow-wrap:break-word}
+.tabs button,.chip{white-space:nowrap}
+.btn,button{text-wrap:balance}
+input,select,textarea{line-height:1.6;font-family:inherit}
+select,input{text-overflow:ellipsis}
+.card h3,.trust li,.menu a,.dn a,.bn a,.sizes label,.ft ul a,summary,.pvname,.qrc,.cg a>*{overflow-wrap:anywhere;min-width:0}
+.card h3{line-height:1.5}
+.bn a{line-height:1.35;text-align:center;padding-inline:2px}
+.top{line-height:1.6}
+.num,.p,.sum,.stats b,.rw span:last-child{font-variant-numeric:lining-nums;font-feature-settings:'tnum' 0}
