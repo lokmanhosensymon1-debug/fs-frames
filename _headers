@@ -1,0 +1,15 @@
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+/css/*
+  Content-Type: text/css; charset=utf-8
+/js/*
+  Content-Type: application/javascript; charset=utf-8
+/data/*
+  Content-Type: application/javascript; charset=utf-8
+  Cache-Control: no-cache
+/admin.html
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

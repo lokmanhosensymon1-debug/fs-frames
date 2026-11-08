@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0a0a0a"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>FS Frames – অ্যাডমিন প্যানেল</title>
+
+<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32.png"><link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
+<link rel="stylesheet" href="./css/fonts.css?v=6"><link rel="stylesheet" href="./css/admin.css?v=6">
+<style>
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:20px 0;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mute);font:600 16px var(--b);padding:12px 16px;cursor:pointer;white-space:nowrap;min-height:48px}
+.tabs button.on{color:var(--gold2);border-color:var(--gold)}
+.tab{display:none}.tab.on{display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.stats div{background:var(--panel);border:1px solid var(--line);padding:12px;text-align:center;color:var(--mute);font-size:14px}.stats b{display:block;color:var(--gold2);font-size:22px}
+.bar{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:14px}
+.oc,.pc{background:var(--panel);border:1px solid var(--line);padding:16px;margin-bottom:12px}
+.oc h3{font-size:18px;color:var(--gold2)}.oc small{color:var(--mute)}.oc p{margin:6px 0;font-size:16px;word-break:break-word}
+.oc .acts2,.pc .acts2{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.oc select,.oc input{min-height:40px;padding:6px 10px;width:auto;flex:1;min-width:130px}
+.pc{display:grid;grid-template-columns:90px 1fr;gap:14px}.pc .th{width:90px}
+.pc.off>.th,.pc.off h3,.pc.off>div>p{opacity:.5}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.bar,.two{grid-template-columns:1fr}}
+#login{max-width:380px;margin:12vh auto}
+#bkw{font-size:15px;margin-bottom:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--line)}
+.oc{border-left:4px solid var(--line)}.oc[data-st=new]{border-left-color:#e0a050}.oc[data-st=confirmed]{border-left-color:#4a90d9}.oc[data-st=shipped]{border-left-color:#8a63d2}.oc[data-st=delivered]{border-left-color:#1f9d55}.oc[data-st=cancelled]{border-left-color:#8a3030;opacity:.6}
+.tabs button span{margin-right:6px}
+.oc,.pc,.box,.stats div,#bkw{border-radius:8px}.oc,.pc{box-shadow:0 4px 18px rgba(0,0,0,.35)}
+.stats div b{font-size:24px}.btn{border-radius:6px}
+.bar3{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px}.chip{flex:none;background:var(--panel);border:1px solid var(--line);color:var(--mute);padding:8px 16px;border-radius:20px;font:600 15px var(--b);cursor:pointer;min-height:40px}.chip.on{border-color:var(--gold);color:var(--gold2)}
+.rbar{display:flex;align-items:flex-end;gap:4px;height:130px;margin-top:10px}.rbar div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;align-items:center;font-size:11px;color:var(--mute)}.rbar i{display:block;width:100%;background:linear-gradient(var(--gold2),var(--gold3));min-height:2px;border-radius:3px 3px 0 0}
+.rw{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:16px}.rw span:last-child{text-align:right;color:var(--gold2)}
+#toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#1f9d55;color:#fff;padding:10px 20px;border-radius:24px;opacity:0;pointer-events:none;transition:.3s;z-index:90;font-size:15px}#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:700px){.bar3{grid-template-columns:1fr 1fr}.bar3 input{grid-column:1/-1}}
+@media(max-width:700px){
+body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;margin:0;gap:0;background:#0a0a0a;border-top:1px solid var(--line);border-bottom:0;padding-bottom:env(safe-area-inset-bottom);overflow:visible}
+.tabs button{flex:1;padding:6px 2px;font-size:13px;min-height:62px;border-bottom:0;border-top:3px solid transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.25}
+.tabs button.on{border-top-color:var(--gold)}.tabs button span{font-size:20px;margin:0}
+.oc .acts2 .btn,.pc .acts2 .btn{flex:1;min-height:44px}.oc select,.oc input{min-width:100%}
+}
+
+.oc .pf{font-size:17px;color:#7bd88f}.oc .pf.neg{color:#e07a7a}.oc .pf small{color:#e0a050}
+.oc details.fd{margin:8px 0 0;max-width:none;background:#0a0a0a}.oc details.fd summary{padding:10px 14px;font-size:15px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 14px}.fg label{font-size:13px;color:var(--mute);display:block}.oc .fg input{width:100%;min-width:0;flex:none;margin-top:4px}
+.cg{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;align-items:center}.cg span{font-size:15px;color:var(--mute)}.cg b{font-size:13px;color:var(--gold2);text-align:center}
+.pl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 24px}
+.rw.big{font-weight:600;border-top:2px solid var(--gold3);margin-top:6px}.rw.neg span:last-child{color:#e07a7a}
+
+.bdg{display:inline-block;font-size:13px;font-weight:600;padding:2px 10px;border-radius:12px;margin:4px 0;border:1px solid}.bdg.vis{color:#7bd88f;border-color:#2f6b43}.bdg.hid{color:#e0a050;border-color:#7a5a1e}
+.pcat{display:inline-block;font-size:13px;color:var(--gold2);margin-left:6px}
+#cfm{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+#cfm .cbx{background:var(--panel);border:1px solid var(--gold3);border-radius:10px;max-width:420px;width:100%;padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+#cfm p{font-size:17px;margin-bottom:14px;overflow-wrap:anywhere}#cfm small{color:var(--mute);font-size:14px;display:block;margin-top:8px}
+#cfm .acts2{display:flex;gap:10px;flex-wrap:wrap}#cfm .btn{flex:1}
+.pc .th img{aspect-ratio:4/5;object-fit:cover}
+</style></head><body>
+<header><div class="wrap nav"><span class="logo"><img src="./images/logo-sm.png" alt="FS Frames লোগো" width="44" height="39"><span><b>FS</b> অ্যাডমিন</span></span><span><a class="btn sm" href="index.html" target="_blank">সাইট দেখুন</a> <button class="btn sm" id="out" hidden>লগআউট</button></span></div></header>
+<div class="wrap">
+<div id="login" class="box"><h2 class="gold" style="font-size:24px" id="lt"></h2><fieldset><label class="l" for="pw">পাসওয়ার্ড</label><input type="password" id="pw" autocomplete="current-password"></fieldset><button class="btn fill" id="lg" style="width:100%">প্রবেশ করুন</button><p class="msg" id="lm"></p><p class="hint">এই পাসওয়ার্ড শুধু এই ব্রাউজারে সংরক্ষিত। কাজ শেষে লগআউট করুন।</p></div>
+<div id="app" hidden>
+<div class="tabs" role="tablist"><button data-t="t1" class="on"><span>📦</span>অর্ডার</button><button data-t="t5"><span>📊</span>রিপোর্ট</button><button data-t="t2"><span>🖼</span>ফ্রেম</button><button data-t="t3"><span>⚙</span>সেটিংস</button><button data-t="t4"><span>💾</span>ব্যাকআপ</button></div>
+
+<div class="tab on" id="t1">
+<div id="bkw"></div>
+<div class="box" id="chk" style="margin-bottom:16px"></div>
+<div class="stats" id="stats"></div>
+<div class="box" style="margin-bottom:16px"><label class="l" for="paste">WhatsApp-এ আসা অর্ডার মেসেজ পেস্ট করুন</label><textarea id="paste" placeholder="FS Frames – নতুন অর্ডার ..."></textarea><div class="acts2" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn fill sm" id="imp">অর্ডার যোগ করুন</button><button class="btn sm" id="man">হাতে লিখে যোগ করুন</button></div></div>
+<form class="box" id="mf" hidden onsubmit="return false" style="margin-bottom:16px"><h3 style="color:var(--gold2);margin-bottom:12px">নতুন অর্ডার (হাতে লিখে)</h3>
+<fieldset><label class="l" for="mn">ক্রেতার নাম *</label><input type="text" id="mn"></fieldset>
+<fieldset><label class="l" for="mp">মোবাইল নম্বর *</label><input type="tel" id="mp" inputmode="numeric" placeholder="১১ ডিজিটের মোবাইল নম্বর"></fieldset>
+<fieldset><label class="l" for="ma">ঠিকানা</label><textarea id="ma"></textarea></fieldset>
+<div class="two"><fieldset><label class="l" for="md">ফ্রেম</label><select id="md"></select></fieldset><fieldset><label class="l" for="ms">সাইজ</label><select id="ms"></select></fieldset></div>
+<div class="two"><fieldset><label class="l" for="mq">পরিমাণ</label><input type="number" id="mq" value="1" min="1" inputmode="numeric"></fieldset><fieldset><label class="l" for="mz">এলাকা</label><select id="mz"><option value="0">সারাদেশে কুরিয়ার (ক্যাশ অন ডেলিভারি)</option></select></fieldset></div>
+<fieldset><label class="l" for="mt">মোট টাকা (খালি রাখলে নিজে হিসাব হবে)</label><input type="number" id="mt" inputmode="numeric"></fieldset>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn fill" id="mv" type="button">অর্ডার সংরক্ষণ</button><button class="btn" id="mx" type="button">বাতিল</button></div></form>
+<div class="bar3"><input type="text" id="oq" placeholder="নাম / ফোন / অর্ডার নং খুঁজুন"><select id="of"><option value="">সব স্ট্যাটাস</option></select><select id="od"><option value="all">সব সময়</option><option value="0">আজ</option><option value="7">৭ দিন</option><option value="30">৩০ দিন</option><option value="m">এই মাস</option></select><select id="os"><option value="">নতুন আগে</option><option value="old">পুরনো আগে</option><option value="hi">বেশি টাকা আগে</option></select></div>
+<div id="olist"></div>
+<button class="btn sm" id="csv">CSV ডাউনলোড</button>
+</div>
+
+<div class="tab" id="t5"><div class="chips" id="rch"></div><div class="stats" id="rst"></div>
+<div class="box" id="rpl" style="margin-bottom:16px"></div>
+<div class="box" style="margin-bottom:16px"><h3 style="color:var(--gold2)">দৈনিক বিক্রি (শেষ ১৪ দিন, বাতিল বাদে)</h3><div class="rbar" id="rbar"></div></div>
+<div class="box" style="margin-bottom:16px"><h3 style="color:var(--gold2)">সেরা ফ্রেম</h3><div id="rtop"></div></div>
+<div class="box"><h3 style="color:var(--gold2);margin-bottom:10px">ক্রেতার তালিকা</h3><input type="text" id="cq" placeholder="নাম বা ফোন খুঁজুন" style="margin-bottom:10px"><div id="clist"></div><button class="btn sm" id="ccsv" style="margin-top:12px">ক্রেতা CSV</button></div></div>
+<div class="tab" id="t2">
+<form class="box" id="pf" onsubmit="return false" style="margin-bottom:18px"><input type="hidden" id="pid">
+<h3 id="pft" style="margin-bottom:14px;color:var(--gold2)">নতুন ফ্রেম যোগ করুন</h3>
+<fieldset><label class="l" for="pn">ফ্রেমের নাম *</label><input type="text" id="pn" maxlength="80"></fieldset>
+<fieldset><label class="l" for="pcat">ক্যাটাগরি (ঐচ্ছিক)</label><input type="text" id="pcat" list="pcats" maxlength="40" placeholder="যেমন: কাপল, ইসলামিক, বিয়ে"><datalist id="pcats"></datalist><div class="chips" id="pcq" style="margin:8px 0 0"></div></fieldset>
+<fieldset><label class="l" for="pd">বিবরণ</label><textarea id="pd"></textarea></fieldset>
+<div class="two"><fieldset><label class="l" for="pp1" id="l1">দাম – সাইজ ১ (৳) *</label><input type="number" id="pp1" inputmode="numeric" min="0"></fieldset><fieldset><label class="l" for="pp2" id="l2">দাম – সাইজ ২ (৳) *</label><input type="number" id="pp2" inputmode="numeric" min="0"></fieldset></div>
+<fieldset><legend>খরচের হিসাব (ঐচ্ছিক – শুধু আপনি দেখবেন, সাইটে যাবে না)</legend><div class="cg"><span></span><b id="cl1"></b><b id="cl2"></b>
+<span>ফ্রেম ক্রয়মূল্য</span><input type="number" id="cbuy1" min="0" inputmode="numeric"><input type="number" id="cbuy2" min="0" inputmode="numeric">
+<span>প্রিন্ট খরচ</span><input type="number" id="cprint1" min="0" inputmode="numeric"><input type="number" id="cprint2" min="0" inputmode="numeric">
+<span>প্যাকেজিং খরচ</span><input type="number" id="cpack1" min="0" inputmode="numeric"><input type="number" id="cpack2" min="0" inputmode="numeric">
+<span>অন্যান্য খরচ</span><input type="number" id="cother1" min="0" inputmode="numeric"><input type="number" id="cother2" min="0" inputmode="numeric"></div><p class="hint" id="cpv"></p></fieldset>
+<fieldset><label class="l" for="pi">ফ্রেমের ছবি</label><input type="file" id="pi" accept="image/*" style="color:var(--mute);width:100%"><p class="hint">মোবাইলে ট্যাপ করলে গ্যালারি বা ক্যামেরা থেকে ছবি নেওয়া যাবে। ছবি নিজে থেকে ছোট ও কমপ্রেস হয়ে যাবে। ছবি না দিলে নমুনা ডিজাইন দেখাবে।</p><div id="ppv" style="width:160px;max-width:60%;margin-top:8px"></div><p class="hint" id="pinf"></p><button class="btn sm red" type="button" id="prm" hidden>ছবি সরান (নমুনা ডিজাইন দেখাবে)</button></fieldset>
+<fieldset><label><input type="checkbox" id="pa" checked style="width:auto;min-height:0"> সাইটে দেখান</label></fieldset>
+<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn fill" id="ps">সংরক্ষণ করুন</button><button class="btn" id="pc2" type="button">নতুন ফর্ম</button></div><p class="msg" id="pm"></p></form>
+<div id="pubw" class="box" style="margin-bottom:12px;padding:12px 14px;font-size:15px"></div><div id="stor" style="font-size:14px;color:var(--mute);margin-bottom:12px"></div>
+<div class="chips" id="pst"></div><div class="chips" id="pct"></div>
+<div id="plist"></div></div>
+
+<div class="tab" id="t3"><form class="box" onsubmit="return false">
+<fieldset><label class="l" for="sw">WhatsApp নম্বর (880 দিয়ে শুরু, মোট ১৩ ডিজিট)</label><input type="text" id="sw" inputmode="numeric"></fieldset>
+<fieldset><label class="l" for="sp">ফোন নম্বর</label><input type="text" id="sp"></fieldset>
+<fieldset><label class="l" for="sf">Facebook পেজ লিংক (ঐচ্ছিক)</label><input type="text" id="sf" placeholder="Facebook পেজের পূর্ণ লিংক (https:// সহ)"></fieldset><fieldset><label class="l" for="sig">Instagram লিংক (ঐচ্ছিক)</label><input type="text" id="sig" placeholder="Instagram প্রোফাইলের পূর্ণ লিংক (https:// সহ)"></fieldset><fieldset><label class="l" for="stt">TikTok লিংক (ঐচ্ছিক)</label><input type="text" id="stt" placeholder="TikTok প্রোফাইলের পূর্ণ লিংক (https:// সহ)"></fieldset>
+<fieldset><label class="l" for="sgf">Google Form লিংক – রিভিউ ও ছবি জমার জন্য (ঐচ্ছিক, ফ্রি)</label><input type="text" id="sgf" placeholder="Google Form-এর পূর্ণ লিংক (https:// সহ)"></fieldset>
+<fieldset><label class="l" for="stg">ট্যাগলাইন (সাইটের QR অংশ ও ফুটারে দেখায়)</label><input type="text" id="stg" maxlength="80"></fieldset>
+<fieldset><label class="l" for="z1">ডেলিভারি চার্জ – সারাদেশ (কুরিয়ার)</label><input type="number" id="z1" min="0" inputmode="numeric"></fieldset>
+<fieldset><legend>কুরিয়ারকে আসলে কত দিতে হয় (শুধু লাভের হিসাবে লাগে, সাইটে যায় না)</legend><input type="number" id="cs1" min="0" inputmode="numeric" placeholder="সারাদেশ – কুরিয়ারকে আসলে কত দিতে হয়"><p class="hint">খালি রাখলে ক্রেতার দেওয়া ডেলিভারি চার্জকেই কুরিয়ার খরচ ধরা হবে (ডেলিভারি থেকে লাভ/ক্ষতি শূন্য)।</p></fieldset>
+<div class="two"><fieldset><label class="l" for="a1">সাইজ ১ এর নাম</label><input type="text" id="a1"></fieldset><fieldset><label class="l" for="a2">সাইজ ২ এর নাম</label><input type="text" id="a2"></fieldset></div>
+<button class="btn fill" id="ss">সেটিংস সংরক্ষণ</button><p class="msg" id="sm"></p>
+<fieldset style="margin-top:20px"><legend>পাসওয়ার্ড বদলান</legend><input type="password" id="np" placeholder="নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"><button class="btn sm" id="cp" style="margin-top:10px" type="button">বদলান</button></fieldset></form><div class="box" style="margin-top:16px"><h3 style="color:var(--gold2)">ক্রেতার রিভিউ (অনুমোদন)</h3><p class="hint" style="margin-bottom:12px">ক্রেতা WhatsApp বা Google Form-এ রিভিউ ও ছবি পাঠালে যাচাই করে এখানে যোগ করুন — এখানে যোগ করা মানেই অনুমোদন। তারপর 'সাইটে প্রকাশ' থেকে ZIP নামিয়ে আপলোড করলে রিভিউ সাইটে আসবে। 'নমুনা' চিহ্নিত রিভিউ সাইটে কখনো দেখানো হয় না।</p><div id="rvl"></div><div class="two"><input type="text" id="rn" placeholder="নাম, এলাকা"><select id="rr"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select></div><textarea id="rt" placeholder="রিভিউ" style="margin:10px 0"></textarea><label class="l" for="rimg">ক্রেতার ছবি (ঐচ্ছিক)</label><input type="file" id="rimg" accept="image/*" style="margin:6px 0 10px;width:100%;color:var(--mute)"><div id="rpv" style="width:90px;margin-bottom:10px"></div><button class="btn sm" id="ra" type="button">রিভিউ যোগ করুন</button></div></div>
+
+<div class="tab" id="t4">
+<div class="box" style="margin-bottom:16px"><h3 style="color:var(--gold2)">💾 ব্যাকআপ (অর্ডার + ফ্রেম + সেটিংস + রিভিউ)</h3><div id="bks" style="margin:8px 0 14px;color:var(--mute)"></div>
+<div class="acts"><button class="btn fill" id="bk">ব্যাকআপ ফাইল নামান</button><button class="btn" id="bs">ফোন থেকে শেয়ার করুন (WhatsApp / Drive)</button><label class="btn" style="cursor:pointer">ব্যাকআপ থেকে রিস্টোর<input type="file" id="rs" accept=".json,application/json" hidden></label></div>
+<p class="hint">ব্যাকআপ ফাইলে ফ্রেমের ছবিসহ সব ডেটা থাকে। সপ্তাহে অন্তত একবার নিন এবং ফাইলটি নিজের WhatsApp বা Google Drive-এ পাঠিয়ে রাখুন। পুরনো শুধু-অর্ডার ব্যাকআপ ফাইলও রিস্টোর করা যায়।</p>
+<div class="box" id="rp" hidden style="margin-top:14px;border-color:var(--gold)"><h3 style="color:var(--gold2)">রিস্টোরের আগে দেখে নিন</h3><div id="rpi" style="margin:8px 0 14px;color:var(--mute)"></div><label style="display:block;margin:0 0 12px;color:var(--white)"><input type="checkbox" id="rsset" checked style="width:auto;min-height:0"> ফাইলের সেটিংস (ফোন, WhatsApp, Facebook, Instagram, TikTok, ট্যাগলাইন, ডেলিভারি ও খরচ-সেটিং) বসান</label><div class="acts"><button class="btn fill" id="rm" type="button">মার্জ করুন (নিরাপদ, কিছু মুছবে না)</button><button class="btn red" id="rrep" type="button">সব প্রতিস্থাপন করুন</button><button class="btn" id="rc" type="button">বাতিল</button></div><p class="hint">প্রতিস্থাপনের আগে বর্তমান ডেটার একটি ব্যাকআপ নিজে থেকে নেমে যাবে।</p></div>
+<p class="msg" id="xm"></p></div>
+<div class="box"><h3 style="color:var(--gold2)">সাইটে পরিবর্তন প্রকাশ করুন</h3>
+<p style="color:var(--mute);margin:8px 0 16px">ফ্রেম বা সেটিংস বদলানোর পর ZIP নামিয়ে খুলুন। ভেতরের <b>data</b> ও <b>images</b> ফোল্ডারের ফাইল হোস্টিংয়ে আগের ফাইলের ওপর আপলোড করুন (বিস্তারিত README-তে)।</p>
+<div class="acts"><button class="btn fill" id="zp">সাইটের ডেটা ZIP ডাউনলোড</button><button class="btn" id="bo">শুধু অর্ডার (JSON)</button><button class="btn red" id="rd">ড্রাফট মুছে সাইটের ডেটা থেকে শুরু করুন</button></div></div></div>
+</div></div>
+<script src="./data/products.js?v=5"></script>
+<script src="./js/core.js?v=5"></script>
+<script>
+const $=id=>document.getElementById(id),L=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}};
+const Sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){alert('ব্রাউজারের স্টোরেজ পূর্ণ। ZIP ডাউনলোড করে পুরনো ফ্রেম মুছুন বা ছোট ছবি দিন।');return false}};
+const hash=async s=>{s='fs:'+s;if(!crypto.subtle)return btoa(unescape(encodeURIComponent(s)));return[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('')};
+let DATA,ORD=L('fs_orders',[]);
+/* ---- খরচ ও লাভ ---- */
+const CK=['buy','print','pack','other'],CL={buy:'ফ্রেম ক্রয়মূল্য',print:'প্রিন্ট খরচ',pack:'প্যাকেজিং খরচ',other:'অন্যান্য খরচ'};
+const cCost=c=>{c=c||{};const o={};CK.forEach(k=>o[k]=[0,1].map(i=>Math.max(0,+((c[k]||[])[i])||0)));return o};
+const cFin=x=>{const a=(x&&x.cship)||[],r=a[1]!==''&&a[1]!=null?a[1]:a[0],v=r===''||r==null?'':Math.max(0,+r||0);return{cship:[v,v]}};
+const FK=['sale','dch','buy','print','pack','other','dcost'],FL=[['sale','বিক্রয়মূল্য (ফ্রেম)'],['dch','ডেলিভারি চার্জ (ক্রেতার)'],['buy','ফ্রেম ক্রয়মূল্য'],['print','প্রিন্ট খরচ'],['pack','প্যাকেজিং খরচ'],['other','অন্যান্য খরচ'],['dcost','কুরিয়ার খরচ (আসল)']];
+const cFinO=f=>{const r={};FK.forEach(k=>r[k]=Math.max(0,Math.round(+(f||{})[k]||0)));return r};
+const num=v=>Math.max(0,Math.round(+en(v)||0)),pt=n=>(n<0?'−':'')+tk(Math.abs(n)),sumC=c=>CK.reduce((a,k)=>a+c[k],0);
+function norm(){DATA.settings=Object.assign({},DEF.settings,DATA.settings);{const s=DATA.settings.ship||[],v=Math.max(0,+(s[1]||s[0])||0);DATA.settings.ship=[v,v]}if(/X/i.test(DATA.settings.wa))DATA.settings.wa=DEF.settings.wa;if(/X/i.test(DATA.settings.phone))DATA.settings.phone=DEF.settings.phone;DATA.fin=cFin(DATA.fin);DATA.reviews=DATA.reviews||[];DATA.products.forEach(p=>{p.cost=cCost(p.cost);p.cat=sN(p.cat).trim().slice(0,40)})}
+const qn=o=>+en(o.qty||'1')||1;
+function finSnap(p,k,q,z,total){const c=cCost(p&&p.cost),dch=Math.min(DATA.settings.ship[z]||0,total),cs=DATA.fin.cship[z];
+ return{sale:total-dch,dch,buy:c.buy[k]*q,print:c.print[k]*q,pack:c.pack[k]*q,other:c.other[k]*q,dcost:(cs===''||cs==null)?dch:cs}}
+function finOf(o){if(o.fin)return o.fin;const z=/বাইরে/.test(o.zone||'')?1:0,k=Math.max(0,sz().indexOf(o.size));return finSnap(DATA.products.find(x=>x.name===o.design),k,qn(o),z,o.total)}
+const F=o=>{const f=finOf(o),cost=f.buy+f.print+f.pack+f.other+f.dcost;return Object.assign({},f,{rev:f.sale+f.dch,cost,profit:f.sale+f.dch-cost,pc:f.buy+f.print+f.pack+f.other})};
+const agg=a=>a.reduce((x,o)=>{const f=F(o);for(const k in x)x[k]+=f[k]||0;return x},{rev:0,cost:0,profit:0,sale:0,dch:0,buy:0,print:0,pack:0,other:0,dcost:0});
+const OPEN=new Set();
+const ST={new:'নতুন',confirmed:'কনফার্মড',shipped:'পাঠানো হয়েছে',delivered:'ডেলিভারড',cancelled:'বাতিল'};
+$('of').innerHTML+=Object.entries(ST).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+function toast(t){let d=$('toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent=t;d.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>d.className='',2200)}
+const cpy=async t=>{try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}};
+/* login */
+$('lt').textContent=L('fs_pw','')?'অ্যাডমিন লগইন':'নতুন পাসওয়ার্ড সেট করুন';
+const start=async()=>{DATA=L('fs_draft',null)||JSON.parse(JSON.stringify(await loadData()));norm();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;sessionStorage.fsin=1;fillS();rO();rP();rR();bkw();try{navigator.storage.persist()}catch(e){}};
+$('lg').onclick=async()=>{const v=$('pw').value,s=L('fs_pw','');if(!s){if(v.length<6){$('lm').textContent='কমপক্ষে ৬ অক্ষর দিন।';return}Sv('fs_pw',await hash(v));start()}else if(await hash(v)===s)start();else $('lm').textContent='পাসওয়ার্ড ভুল।'};
+$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('lg').click()});
+$('out').onclick=()=>{delete sessionStorage.fsin;location.reload()};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button,.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(b.dataset.t).classList.add('on');if(b.dataset.t==='t5')rRep();scrollTo(0,0)});
+const bump=()=>{try{localStorage.setItem('fs_chg',String((+localStorage.getItem('fs_chg')||0)+1))}catch(e){}if(DATA)bkw()};
+const sc=()=>+localStorage.getItem('fs_sitechg')||0,saveD=()=>{const r=Sv('fs_draft',DATA);if(r){bump();try{localStorage.setItem('fs_sitechg',String(sc()+1))}catch(e){}}return r},saveO=()=>{const r=Sv('fs_orders',ORD);if(r)bump();return r};
+/* orders */
+function parse(t){const m={};t.split('\n').forEach(l=>{const i=l.indexOf(':');if(i>0)m[l.slice(0,i).trim()]=l.slice(i+1).trim()});
+ return{id:m['অর্ডার নং']||'FS-'+Date.now().toString(36).toUpperCase().slice(-5),date:new Date().toISOString(),design:m['ফ্রেম']||'',size:m['সাইজ']||'',qty:m['পরিমাণ']||'১',nm:m['ফ্রেমে নাম']||'',cn:m['নাম']||'',ph:en(m['মোবাইল']||'').replace(/\D/g,''),ad:m['ঠিকানা']||'',zone:m['এলাকা']||'',total:+en(m['মোট']||'0').replace(/\D/g,'')||0,has:(m['নিজের ছবি']||'').startsWith('আছে'),gift:m['উপহার বার্তা']||'',nc:m['নামের রং']||'',status:'new',note:''}}
+function add(o){if(ORD.some(x=>x.id===o.id)){alert('এই অর্ডার নং আগে থেকেই আছে: '+o.id);return false}if(!o.fin){o.fin=cFinO(finOf(o))}ORD.unshift(o);saveO();rO();return true}
+$('imp').onclick=()=>{const t=$('paste').value.trim();if(!t)return;const o=parse(t);if(!o.cn&&!o.ph){alert('মেসেজ থেকে নাম/মোবাইল পাওয়া যায়নি। "হাতে লিখে যোগ করুন" ব্যবহার করুন।');return}if(add(o))$('paste').value=''};
+$('man').onclick=()=>{$('md').innerHTML=DATA.products.map((p,i)=>`<option value="${i}">${esc(p.name)}</option>`).join('');$('ms').innerHTML=sz().map((x,i)=>`<option value="${i}">${esc(x)}</option>`).join('');$('mf').hidden=false;$('mn').focus();$('mf').scrollIntoView({behavior:'smooth'})};
+$('mx').onclick=()=>$('mf').hidden=true;
+$('mv').onclick=()=>{const cn=$('mn').value.trim(),ph=en($('mp').value).replace(/\D/g,'');if(!cn||!/^(?:88)?01[3-9]\d{8}$/.test(ph)){alert('নাম ও সঠিক মোবাইল নম্বর দিন।');return}
+ const p=DATA.products[+$('md').value],k=+$('ms').value,q=Math.max(1,+$('mq').value||1),z=+$('mz').value,t=+$('mt').value||(p?p.prices[k]*q+DATA.settings.ship[z]:0);
+ if(add({id:'FS-'+Date.now().toString(36).toUpperCase().slice(-5),date:new Date().toISOString(),design:p?p.name:'',size:sz()[k]||'',qty:bn(q),nm:'',cn,ph,ad:$('ma').value.trim(),zone:'সারাদেশে কুরিয়ার',total:t,has:false,status:'new',note:''})){$('mf').reset();$('mf').hidden=true}};
+function rO(){const q=$('oq').value.toLowerCase(),f=$('of').value,dr=$('od').value,so=$('os').value;
+ $('of').innerHTML='<option value="">সব স্ট্যাটাস ('+bn(ORD.length)+')</option>'+Object.entries(ST).map(([k,v])=>`<option value="${k}"${f===k?' selected':''}>${v} (${bn(ORD.filter(o=>o.status===k).length)})</option>`).join('');
+ const l=ORD.filter(o=>(!f||o.status===f)&&inR(o,dr)&&(!q||JSON.stringify(o).toLowerCase().includes(q)));
+ if(so==='old')l.sort((a,b)=>a.date.localeCompare(b.date));else if(so==='hi')l.sort((a,b)=>b.total-a.total);else l.sort((a,b)=>b.date.localeCompare(a.date));
+ const c=s=>ORD.filter(o=>o.status===s).length,rev=ORD.filter(o=>o.status==='delivered').reduce((a,o)=>a+o.total,0),pc={};ORD.forEach(o=>pc[o.ph]=(pc[o.ph]||0)+1);
+ $('stats').innerHTML=`<div><b>${bn(ORD.length)}</b>মোট অর্ডার</div><div><b>${bn(ORD.filter(o=>inR(o,'0')).length)}</b>আজকের অর্ডার</div><div><b>${bn(c('new'))}</b>নতুন</div><div><b>${bn(c('confirmed')+c('shipped'))}</b>চলমান</div><div><b>${tk(rev)}</b>ডেলিভারড বিক্রি</div><div><b>${pt(agg(ORD.filter(o=>o.status==='delivered')).profit)}</b>ডেলিভারড লাভ</div>`;
+ $('olist').innerHTML=l.map(o=>`<div class="oc" data-st="${esc(o.status)}" data-id="${esc(o.id)}"><h3>${esc(o.cn)} <small>#${esc(o.id)} · ${bn(new Date(o.date).toLocaleDateString('en-GB'))}</small></h3><p>${esc(o.design)} ${esc(o.size)} × ${esc(o.qty)}${o.nm?' · নাম: '+esc(o.nm)+(o.nc?' ('+esc(o.nc)+')':''):''}${o.has?' · <b style="color:var(--gold2)">কাস্টম ছবি</b>':''}</p>${o.gift?'<p>🎁 '+esc(o.gift)+'</p>':''}<p>📞 <a href="tel:${esc(o.ph)}">${bn(esc(o.ph))}</a> · ${esc(o.zone)}${pc[o.ph]>1?' · <small style="color:var(--gold2)">'+bn(pc[o.ph])+'টি অর্ডার</small>':''}<br>${esc(o.ad)}</p><p><b>${tk(o.total)}</b> (ক্যাশ অন ডেলিভারি)</p>${(()=>{const f=F(o);return `<p class="pf${f.profit<0?' neg':''}">${f.profit<0?'ক্ষতি':'লাভ'}: <b>${pt(f.profit)}</b>${f.pc===0?' <small>⚠ ফ্রেমের খরচ বসানো নেই</small>':''}</p><details class="fd" data-d="${esc(o.id)}"${OPEN.has(o.id)?' open':''}><summary>লাভ-ক্ষতির হিসাব দেখুন / বদলান</summary><div class="fg">${FL.map(([k,l])=>`<label>${l}<input type="number" min="0" inputmode="numeric" data-f="${k}" value="${f[k]}"></label>`).join('')}</div></details>`})()}
+ <div class="acts2"><select data-a="st">${Object.entries(ST).map(([k,v])=>`<option value="${k}"${o.status===k?' selected':''}>${v}</option>`).join('')}</select><input type="text" data-a="nt" placeholder="নোট" value="${esc(o.note)}"></div>
+ <div class="acts2"><a class="btn sm" href="tel:${esc(o.ph)}">📞 কল</a><a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/${/^88/.test(o.ph)?'':'88'}${esc(o.ph)}?text=${encodeURIComponent('আসসালামু আলাইকুম '+o.cn+', FS Frames থেকে আপনার অর্ডার ('+o.id+') নিয়ে যোগাযোগ করছি।')}">WhatsApp</a><button class="btn sm" data-a="cp">📋 কপি</button><button class="btn red sm" data-a="del">মুছুন</button></div></div>`).join('')||'<p class="hint">কোনো অর্ডার নেই।</p>'}
+$('olist').addEventListener('toggle',e=>{const id=e.target.dataset&&e.target.dataset.d;if(id){e.target.open?OPEN.add(id):OPEN.delete(id)}},true);
+$('olist').addEventListener('change',e=>{const a=e.target.dataset.a,o=ORD.find(x=>x.id===e.target.closest('.oc').dataset.id);if(!o)return;
+ if(e.target.dataset.f){const f=cFinO(finOf(o));f[e.target.dataset.f]=num(e.target.value);o.fin=f;o.total=f.sale+f.dch;OPEN.add(o.id);saveO();rO();toast('হিসাব সংরক্ষিত');return}
+ if(a==='st')o.status=e.target.value;if(a==='nt')o.note=e.target.value;saveO();rO();toast(a==='st'?'স্ট্যাটাস বদলেছে':'নোট সংরক্ষিত')});
+$('olist').addEventListener('click',e=>{const a=e.target.dataset.a;if(!a)return;const id=e.target.closest('.oc').dataset.id,o=ORD.find(x=>x.id===id);if(!o)return;
+
+ if(a==='del'&&confirm('এই অর্ডার মুছবেন?')){ORD=ORD.filter(x=>x.id!==id);saveO();rO()}
+ if(a==='cp')cpy(`অর্ডার: ${o.id}\nনাম: ${o.cn}\nমোবাইল: ${o.ph}\nঠিকানা: ${o.ad}\nফ্রেম: ${o.design} ${o.size} × ${o.qty}\nক্যাশ অন ডেলিভারি: ${o.total} টাকা`).then(()=>toast('অর্ডারের তথ্য কপি হয়েছে'))});
+$('oq').oninput=$('of').onchange=$('od').onchange=$('os').onchange=rO;
+const dl=(blob,n)=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)};
+$('csv').onclick=()=>{const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',h=['id','date','cn','ph','ad','zone','design','size','qty','nm','total','status','note'];dl(new Blob(['\ufeff'+[h.concat(['sale','delivery_charge','buy_cost','print_cost','pack_cost','other_cost','courier_cost','profit']).join(',')].concat(ORD.map(o=>{const f=F(o);return h.map(k=>q(o[k])).concat([f.sale,f.dch,f.buy,f.print,f.pack,f.other,f.dcost,f.profit].map(q)).join(',')})).join('\n')],{type:'text/csv'}),'orders.csv')};
+/* products */
+let img='',imgRm=false,fSt='all',fCat='all';
+const sz=()=>DATA.settings.sizes||['৮×১০ ইঞ্চি','১২×১৮ ইঞ্চি'];
+const cats=()=>[...new Set(DATA.products.map(p=>p.cat).filter(Boolean))];
+const editing=()=>DATA.products.find(x=>x.id===$('pid').value);
+/* অর্ডারের হিসাব স্থির রাখা: ফ্রেম বদলানো/মোছার আগে হিসাব-সংরক্ষণহীন অর্ডারগুলোর হিসাব জমা করে রাখা হয় */
+function freezeOrders(){let n=0;ORD.forEach(o=>{if(!o.fin){try{o.fin=cFinO(finOf(o));n++}catch(e){}}});if(n)saveO()}
+function ask(msg,ok){return new Promise(res=>{const d=document.createElement('div');d.id='cfm';d.setAttribute('role','alertdialog');d.setAttribute('aria-modal','true');
+ d.innerHTML='<div class="cbx"><p>'+msg+'</p><div class="acts2"><button class="btn red" type="button" data-r="1">'+ok+'</button><button class="btn" type="button" data-r="0">বাতিল</button></div></div>';
+ document.body.appendChild(d);const kd=e=>{if(e.key==='Escape')done(false)},done=v=>{document.removeEventListener('keydown',kd);d.remove();res(v)};
+ document.addEventListener('keydown',kd);d.addEventListener('click',e=>{if(e.target===d)done(false);const r=e.target.dataset&&e.target.dataset.r;if(r!=null)done(r==='1')});d.querySelector('[data-r="0"]').focus()})}
+const pb=()=>L('fs_pub',{c:0}).c||0;
+function pubw(){const n=Math.max(0,sc()-pb());$('pubw').innerHTML=n?`<span style="color:#e0a050">⚠ সাইটে এখনো প্রকাশ হয়নি – ${bn(n)}টি পরিবর্তন অপেক্ষায়</span> <button class="btn sm" type="button" id="pubgo" style="margin-left:8px">আপডেট ZIP নামান</button><p class="hint">ZIP খুলে data ও images ফোল্ডার হোস্টিংয়ে আপলোড করলেই কাস্টমার সাইটে নতুন ডিজাইন দেখা যাবে — HTML বদলাতে হবে না।</p>`:'<span style="color:var(--mute)">✓ সব পরিবর্তনের আপডেট ZIP নামানো হয়েছে</span>'}
+$('pubw').addEventListener('click',e=>{if(e.target.id==='pubgo')$('zp').click()});
+function stor(){let b=0;try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);b+=k.length+(localStorage.getItem(k)||'').length}}catch(e){}
+ const pct=Math.min(100,Math.round(b/5e6*100));$('stor').innerHTML='স্টোরেজ ব্যবহার: <b style="color:'+(pct>=80?'#e0a050':'var(--gold2)')+'">'+bn(pct)+'%</b>'+(pct>=80?' – প্রায় পূর্ণ! ব্যাকআপ নিন এবং অপ্রয়োজনীয় ফ্রেম মুছুন বা ছোট ছবি দিন।':'')}
+function rP(){chk();$('l1').textContent='দাম – '+sz()[0]+' (৳) *';$('l2').textContent='দাম – '+sz()[1]+' (৳) *';$('cl1').textContent=sz()[0];$('cl2').textContent=sz()[1];cpv();pubw();stor();
+ const all=DATA.products,vis=all.filter(p=>p.active!==false).length,cs=cats();
+ if(fCat!=='all'&&!cs.includes(fCat))fCat='all';
+ $('pcats').innerHTML=cs.map(c=>`<option value="${esc(c)}">`).join('');
+ $('pcq').innerHTML=cs.map(c=>`<button type="button" class="chip" data-q="${esc(c)}">${esc(c)}</button>`).join('');
+ $('pst').innerHTML=[['all','সব ('+bn(all.length)+')'],['on','দেখানো ('+bn(vis)+')'],['off','লুকানো ('+bn(all.length-vis)+')']].map(([k,v])=>`<button type="button" class="chip${fSt===k?' on':''}" data-st="${k}">${v}</button>`).join('');
+ $('pct').innerHTML=cs.length?[['all','সব ক্যাটাগরি']].concat(cs.map(c=>[c,c])).map(([k,v])=>`<button type="button" class="chip${fCat===k?' on':''}" data-ct="${esc(k)}">${esc(v)}</button>`).join(''):'';
+ const f=all.filter(p=>(fSt==='all'||(fSt==='on')===(p.active!==false))&&(fCat==='all'||p.cat===fCat)),flt=fSt!=='all'||fCat!=='all';
+ $('plist').innerHTML=f.map(p=>`<div class="pc${p.active===false?' off':''}" data-id="${esc(p.id)}">${thumb(p)}<div><h3 style="font-size:18px">${esc(p.name)}${p.cat?`<span class="pcat">${esc(p.cat)}</span>`:''}</h3><span class="bdg ${p.active===false?'hid':'vis'}">${p.active===false?'লুকানো – সাইটে দেখা যাচ্ছে না':'সাইটে দেখা যাচ্ছে'}</span><p style="color:var(--mute);font-size:15px">${esc(p.desc)}</p><b style="color:var(--gold2)">${tk(p.prices[0])} / ${tk(p.prices[1])}</b>${(()=>{const c=cCost(p.cost),a=sumC({buy:c.buy[0],print:c.print[0],pack:c.pack[0],other:c.other[0]}),b=sumC({buy:c.buy[1],print:c.print[1],pack:c.pack[1],other:c.other[1]});return a+b?`<p style="font-size:14px;color:#7bd88f">লাভ/পিস (ডেলিভারি বাদে): ${pt(p.prices[0]-a)} / ${pt(p.prices[1]-b)}</p>`:'<p style="font-size:14px;color:#e0a050">খরচ দেওয়া নেই</p>'})()}<div class="acts2">${flt?'':'<button class="btn sm" data-a="up">↑</button><button class="btn sm" data-a="top" title="সবার ওপরে">⤒ ওপরে</button>'}<button class="btn sm" data-a="tg">${p.active===false?'দেখান':'লুকান'}</button><button class="btn sm" data-a="ed">সম্পাদনা</button><button class="btn red sm" data-a="del">মুছুন</button></div></div></div>`).join('')||`<p class="hint">${all.length?'এই ফিল্টারে কোনো ফ্রেম নেই।':'কোনো ফ্রেম নেই।'}</p>`}
+function rs(f,m,q){m=m||1000;q=q||.82;return new Promise((r,j)=>{const i=new Image,u=URL.createObjectURL(f);i.onload=()=>{const s=Math.min(1,m/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(i.width*s));c.height=Math.max(1,Math.round(i.height*s));const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);r(c.toDataURL('image/jpeg',q))};i.onerror=()=>{URL.revokeObjectURL(u);j(new Error('img'))};i.src=u})}
+const kb=d=>Math.round((d.length-23)*3/4/1024);
+function showPv(){const p=editing();let h='',inf='';
+ if(img){h=thumb({imgData:img,name:'নতুন ছবি'});inf='নতুন ছবি ('+bn(kb(img))+' KB) – সংরক্ষণ করলে সাইটের ছবি বদলাবে।'}
+ else if(imgRm){h=thumb({style:p?p.style:0,name:''});inf='ছবি সরানো হবে – সংরক্ষণ করলে নমুনা ডিজাইন দেখাবে।'}
+ else if(p){h=thumb(p);inf=(p.imgData||p.image)?'বর্তমান ছবি। বদলাতে নতুন ছবি বেছে নিন।':'এখন নমুনা ডিজাইন দেখাচ্ছে। নিজের ছবি দিতে ফাইল বেছে নিন।'}
+ $('ppv').innerHTML=h;$('pinf').textContent=inf;$('prm').hidden=!(p&&(p.imgData||p.image)&&!imgRm)&&!img}
+$('pi').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+ if(!/^image\//.test(f.type)&&!/\.(jpe?g|png|webp|gif|bmp)$/i.test(f.name)){$('pm').textContent='শুধু ছবি (JPG/PNG/WebP) দিন।';e.target.value='';return}
+ if(f.size>25*1048576){$('pm').textContent='ছবিটি অনেক বড় (২৫ MB-এর বেশি)। ছোট ছবি দিন।';e.target.value='';return}
+ try{img=await rs(f,900,.8);imgRm=false;$('pm').textContent='';showPv()}catch(err){img='';e.target.value='';$('pm').textContent='এই ছবিটি খোলা যায়নি। JPG বা PNG ছবি দিন (iPhone HEIC হলে JPG করে নিন)।'}};
+$('prm').onclick=()=>{img='';imgRm=true;$('pi').value='';showPv()};
+const cin=(k,i)=>$('c'+k+i);
+const rdC=()=>{const c={};CK.forEach(k=>c[k]=[num(cin(k,1).value),num(cin(k,2).value)]);return c};
+function cpv(){const c=rdC(),a=[0,1].map(i=>sumC({buy:c.buy[i],print:c.print[i],pack:c.pack[i],other:c.other[i]})),p=[+$('pp1').value||0,+$('pp2').value||0];$('cpv').textContent=(a[0]+a[1])?`প্রতি পিসে লাভ (ডেলিভারি বাদে): ${sz()[0]} → ${pt(p[0]-a[0])}, ${sz()[1]} → ${pt(p[1]-a[1])}`:'খরচ দিলে এখানে প্রতি পিসের লাভ দেখাবে।'}
+['pp1','pp2'].forEach(i=>$(i).addEventListener('input',cpv));CK.forEach(k=>[1,2].forEach(i=>cin(k,i).addEventListener('input',cpv)));
+function clr(){$('pid').value=$('pn').value=$('pd').value=$('pp1').value=$('pp2').value=$('pcat').value='';CK.forEach(k=>[1,2].forEach(i=>cin(k,i).value=''));cpv();$('pi').value='';img='';imgRm=false;$('ppv').innerHTML='';$('pinf').textContent='';$('prm').hidden=true;$('pa').checked=true;$('pft').textContent='নতুন ফ্রেম যোগ করুন';$('pc2').textContent='নতুন ফর্ম'}
+$('pc2').onclick=()=>{clr();$('pm').textContent=''};
+$('pcq').addEventListener('click',e=>{if(e.target.dataset.q!=null)$('pcat').value=e.target.dataset.q});
+$('pst').addEventListener('click',e=>{if(e.target.dataset.st){fSt=e.target.dataset.st;rP()}});
+$('pct').addEventListener('click',e=>{if(e.target.dataset.ct!=null){fCat=e.target.dataset.ct;rP()}});
+$('ps').onclick=()=>{const n=$('pn').value.trim(),a=+$('pp1').value,b=+$('pp2').value;if(!n||!(a>0)||!(b>0)){$('pm').textContent='নাম ও দুটি দাম (০-এর বেশি) দিন।';return}
+ const ed=editing();if(DATA.products.some(x=>x!==ed&&x.name.trim().toLowerCase()===n.toLowerCase())){$('pm').textContent='এই নামে আরেকটি ফ্রেম আছে। আলাদা নাম দিন (অর্ডারের হিসাব নামের সাথে মেলানো হয়)।';return}
+ freezeOrders();const bak=JSON.stringify(DATA.products);
+ let p=ed;if(!p){p={id:'p'+Date.now().toString(36),style:DATA.products.length%6,image:''};DATA.products.unshift(p)}
+ Object.assign(p,{name:n,cat:$('pcat').value.trim().slice(0,40),desc:$('pd').value.trim(),prices:[a,b],active:$('pa').checked,cost:rdC()});
+ if(img){p.imgData=img;p.image='images/'+p.id+'-'+Date.now().toString(36)+'.jpg'}else if(imgRm){delete p.imgData;p.image=''}
+ if(saveD()){const was=!!ed;clr();rP();$('pm').textContent=was?'পরিবর্তন সংরক্ষিত হয়েছে। সাইটে দিতে "আপডেট ZIP নামান" চাপুন।':'নতুন ফ্রেম যোগ হয়েছে। সাইটে দিতে "আপডেট ZIP নামান" চাপুন।';toast(was?'ফ্রেম আপডেট হয়েছে':'নতুন ফ্রেম যোগ হয়েছে')}
+ else{DATA.products=JSON.parse(bak);rP()}};
+$('plist').addEventListener('click',async e=>{const a=e.target.dataset.a;if(!a)return;const c=e.target.closest('.pc');if(!c)return;const p=DATA.products.find(x=>x.id===c.dataset.id);if(!p)return;
+ if(a==='up'){const i=DATA.products.indexOf(p);if(i>0){[DATA.products[i-1],DATA.products[i]]=[DATA.products[i],DATA.products[i-1]];saveD();rP();toast('ফ্রেম ওপরে উঠেছে')}}
+ if(a==='top'){const i=DATA.products.indexOf(p);if(i>0){DATA.products.splice(i,1);DATA.products.unshift(p);saveD();rP();toast('ফ্রেম সবার ওপরে উঠেছে')}}
+ if(a==='tg'){p.active=p.active===false;saveD();rP();toast(p.active?'সাইটে দেখানো হবে':'সাইট থেকে লুকানো হয়েছে')}
+ if(a==='del'){const ok=await ask('<b>'+esc(p.name)+'</b> মুছে ফেলবেন?<small>অর্ডার ও লাভ-ক্ষতির হিসাব আগের মতোই থাকবে। সাময়িকভাবে সরাতে চাইলে মুছে না ফেলে “লুকান” ব্যবহার করুন।</small>','হ্যাঁ, মুছুন');if(!ok)return;
+  freezeOrders();const bak=JSON.stringify(DATA.products);DATA.products=DATA.products.filter(x=>x!==p);
+  if(saveD()){if($('pid').value===p.id)clr();rP();toast('ফ্রেম মুছে ফেলা হয়েছে')}else{DATA.products=JSON.parse(bak);rP()}}
+ if(a==='ed'){$('pid').value=p.id;$('pn').value=p.name;$('pcat').value=p.cat||'';$('pd').value=p.desc||'';$('pp1').value=p.prices[0];$('pp2').value=p.prices[1];$('pa').checked=p.active!==false;const c=cCost(p.cost);CK.forEach(k=>[1,2].forEach(i=>cin(k,i).value=c[k][i-1]||''));cpv();img='';imgRm=false;$('pi').value='';$('pm').textContent='';showPv();$('pft').textContent='ফ্রেম সম্পাদনা: '+p.name;$('pc2').textContent='সম্পাদনা বাতিল';scrollTo({top:0,behavior:'smooth'})}});
+/* settings */
+function fillS(){const s=DATA.settings;$('sw').value=s.wa;$('sp').value=s.phone;$('sf').value=s.fb||'';$('sig').value=s.ig||'';$('stt').value=s.tt||'';$('sgf').value=s.gform||'';$('stg').value=s.tagline||'';$('z1').value=s.ship[1]||s.ship[0];$('cs1').value=DATA.fin.cship[1]===''?DATA.fin.cship[0]:DATA.fin.cship[1];$('a1').value=sz()[0];$('a2').value=sz()[1]}
+$('ss').onclick=()=>{const w=en($('sw').value).replace(/\D/g,'');if(!waOk(w)){$('sm').textContent='WhatsApp নম্বর ৮৮০ দিয়ে শুরু করে ১৩ ডিজিট দিন (880 1X XXXXXXXX)।';return}
+ if(!/^(?:\+?88)?01[3-9]\d{8}$/.test(en($('sp').value).replace(/[\s-]/g,''))){$('sm').textContent='ফোন নম্বর ১১ ডিজিটের সঠিক নম্বর দিন।';return}
+ if(['sf','sig','stt','sgf'].some(k=>$(k).value.trim()&&!/^https?:\/\//i.test($(k).value.trim()))){$('sm').textContent='সোশ্যাল লিংক https:// দিয়ে শুরু হতে হবে।';return}
+ DATA.settings={wa:w,phone:$('sp').value.trim(),fb:$('sf').value.trim(),ig:$('sig').value.trim(),tt:$('stt').value.trim(),gform:$('sgf').value.trim(),tagline:$('stg').value.trim()||DEF.settings.tagline,ship:[+$('z1').value||0,+$('z1').value||0],sizes:[$('a1').value.trim()||'সাইজ ১',$('a2').value.trim()||'সাইজ ২']};
+ DATA.fin=cFin({cship:[$('cs1').value===''?'':num($('cs1').value),$('cs1').value===''?'':num($('cs1').value)]});
+ if(saveD()){chk();$('sm').textContent='সংরক্ষিত। সাইটে দিতে ZIP নামিয়ে আপলোড করুন।';rP()}};
+$('cp').onclick=async()=>{const v=$('np').value;if(v.length<6){alert('কমপক্ষে ৬ অক্ষর');return}Sv('fs_pw',await hash(v));$('np').value='';alert('পাসওয়ার্ড বদলেছে।')};
+function rR(){$('rvl').innerHTML=DATA.reviews.map((r,i)=>`<div class="pc" style="grid-template-columns:1fr auto"><div>${(r.imgData||r.img)?`<img src="${esc(r.imgData||r.img)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;float:right;margin-left:10px">`:''}<b>${esc(r.n)}</b>${r.sample?' <small style="color:#e0a050">(নমুনা)</small>':''}<div style="color:var(--gold)">${'★'.repeat(r.r)}</div><p style="font-size:15px;color:var(--mute)">${esc(r.t)}</p></div><button class="btn red sm" data-i="${i}">মুছুন</button></div>`).join('')||'<p class="hint">কোনো রিভিউ নেই।</p>'}
+$('rvl').addEventListener('click',e=>{const i=e.target.dataset.i;if(i==null)return;DATA.reviews.splice(+i,1);saveD();rR();chk()});
+let rimgD='';$('rimg').onchange=async e=>{const f=e.target.files[0];if(!f)return;rimgD=await rs(f,640,.72).catch(()=>{alert('এই ছবিটি খোলা যায়নি।');return ''});$('rpv').innerHTML=`<img src="${rimgD}" alt="" style="width:90px;border-radius:8px">`};
+$('ra').onclick=()=>{const n=$('rn').value.trim(),t=$('rt').value.trim();if(!n||!t)return;const o=cRev({n,t,r:+$('rr').value,imgData:rimgD});DATA.reviews.push(o);if(!saveD()){DATA.reviews.pop();alert('স্টোরেজ পূর্ণ – ছোট ছবি বা কম রিভিউ ছবি ব্যবহার করুন।');return}rimgD='';$('rimg').value='';$('rpv').innerHTML='';$('rn').value=$('rt').value='';rR();chk()};
+function chk(){const s=DATA.settings,w=[];if(!waOk(s.wa))w.push('WhatsApp নম্বর সঠিক নয় (সেটিংসে ঠিক করুন)');if(!/^(?:\+?88)?01[3-9]\d{8}$/.test(String(s.phone).replace(/[\s-]/g,'')))w.push('ফোন নম্বর সঠিক নয়');[['fb','Facebook'],['ig','Instagram'],['tt','TikTok']].forEach(([k,n])=>{if(!safe(s[k]))w.push(n+' লিংক নেই (সাইটের বোতাম ও QR-এ আসবে না)')});if(!safe(s.gform))w.push('Google Form লিংক নেই (রিভিউ পেজে শুধু WhatsApp বোতাম থাকবে)');const ns=(DATA.reviews||[]).filter(r=>r.sample).length;if(ns)w.push(bn(ns)+'টি নমুনা রিভিউ আছে (সেটিংস → রিভিউ)');const ni=DATA.products.filter(p=>!p.image&&!p.imgData).length;if(ni)w.push(bn(ni)+'টি ফ্রেমে আসল ছবি নেই, নমুনা ডিজাইন দেখাচ্ছে');$('chk').innerHTML=w.length?'<b style="color:#e0a050">লাইভ করার আগে ঠিক করুন:</b><ul style="margin:6px 0 0 20px;color:var(--mute)">'+w.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'<b style="color:var(--gold2)">✓ লাইভ করার জন্য প্রস্তুত</b>'}
+/* export */
+function crc(b){const t=crc.t||(crc.t=Array.from({length:256},(_,n)=>{let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;return c>>>0}));let r=-1;for(const x of b)r=t[(r^x)&255]^(r>>>8);return(r^-1)>>>0}
+function zip(files){const E=new TextEncoder(),parts=[],cd=[];let off=0,cs=0;
+ for(const f of files){const n=E.encode(f.name),d=f.data,c=crc(d),h=new DataView(new ArrayBuffer(30));
+  h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x800,true);h.setUint16(12,0x5821,true);h.setUint32(14,c,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,n.length,true);
+  const g=new DataView(new ArrayBuffer(46));g.setUint32(0,0x02014b50,true);g.setUint16(4,20,true);g.setUint16(6,20,true);g.setUint16(8,0x800,true);g.setUint16(14,0x5821,true);g.setUint32(16,c,true);g.setUint32(20,d.length,true);g.setUint32(24,d.length,true);g.setUint16(28,n.length,true);g.setUint32(42,off,true);
+  parts.push(h.buffer,n,d);cd.push(g.buffer,n);off+=30+n.length+d.length;cs+=46+n.length}
+ const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cd,e.buffer],{type:'application/zip'})}
+$('zp').onclick=()=>{const out=JSON.parse(JSON.stringify(DATA)),files=[];delete out.fin;out.products.forEach(p=>delete p.cost);
+ out.products.forEach(p=>{if(p.imgData){const nm=/^images\/[\w.-]+$/.test(p.image||'')?p.image:'images/'+p.id+'.jpg',b=atob(p.imgData.split(',')[1]);files.push({name:nm,data:Uint8Array.from(b,c=>c.charCodeAt(0))});p.image=nm;delete p.imgData}});
+ out.reviews=(out.reviews||[]).filter(r=>!r.sample);out.reviews.forEach(r=>{if(r.imgData){const b=atob(r.imgData.split(',')[1]);files.push({name:'images/reviews/'+r.id+'.jpg',data:Uint8Array.from(b,c=>c.charCodeAt(0))});r.img='images/reviews/'+r.id+'.jpg';delete r.imgData}});
+ files.unshift({name:'data/products.js',data:new TextEncoder().encode('window.FS_DATA = '+JSON.stringify(out,null,1)+';\n')});
+ dl(zip(files),'fs-frames-update.zip');Sv('fs_pub',{c:sc()});pubw();$('xm').textContent='ZIP নেমেছে। খুলে data ও images ফোল্ডারের ফাইল হোস্টিংয়ে আপলোড করুন।'};
+const today=()=>new Date().toISOString().slice(0,10);
+function bkData(){return{app:'fs-frames',version:3,date:new Date().toISOString(),orders:ORD,site:{settings:DATA.settings,products:DATA.products,reviews:DATA.reviews||[],fin:DATA.fin}}}
+const fnv=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619)}return 'f'+(h>>>0).toString(16)};
+const shaS=async t=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const bodyS=d=>JSON.stringify({orders:d.orders,site:d.site}),sumOf=async t=>(window.crypto&&crypto.subtle)?shaS(t):fnv(t);
+async function verify(d){if(!d.sum)return null;const t=bodyS(d);if(d.sum.length===64)return(window.crypto&&crypto.subtle)?(await shaS(t))===d.sum:null;return fnv(t)===d.sum}
+const mkBk=async()=>{const d=bkData();d.sum=await sumOf(bodyS(d));return new File([JSON.stringify(d)],'fs-frames-backup-'+today()+'.json',{type:'application/json'})};
+const mark=()=>{Sv('fs_bk',{t:Date.now(),chg:+localStorage.getItem('fs_chg')||0});bkw()};
+function bkw(){const b=L('fs_bk',null),chg=+localStorage.getItem('fs_chg')||0,since=b?Math.max(0,chg-b.chg):chg,days=b?Math.floor((Date.now()-b.t)/864e5):0,bad=!b||days>=7||since>=10;
+ const txt=b?'শেষ ব্যাকআপ: '+(days?bn(days)+' দিন আগে':'আজ')+' · এরপর '+bn(since)+'টি পরিবর্তন':'এখনো কোনো ব্যাকআপ নেওয়া হয়নি',h=`<span style="color:${bad?'#e0a050':'var(--mute)'}">${bad?'⚠ ':'✓ '}${txt}</span>`;
+ $('bkw').innerHTML=h+(bad?' <a href="#" data-go="1" style="color:var(--gold2);text-decoration:underline">এখনই নিন</a>':'');
+ $('bks').innerHTML=`<p>অর্ডার: <b>${bn(ORD.length)}</b> · ফ্রেম: <b>${bn(DATA.products.length)}</b> · রিভিউ: <b>${bn((DATA.reviews||[]).length)}</b></p><p>${h}</p>`}
+$('bkw').onclick=e=>{if(e.target.dataset.go){e.preventDefault();document.querySelector('[data-t=t4]').click()}};
+$('bk').onclick=async()=>{const f=await mkBk();dl(f,f.name);mark();$('xm').textContent='ব্যাকআপ ফাইল নেমেছে। ফাইলটি নিজের WhatsApp বা Google Drive-এ পাঠিয়ে রাখুন।'};
+$('bs').onclick=async()=>{const f=await mkBk();if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'FS Frames ব্যাকআপ'});mark();$('xm').textContent='শেয়ার হয়েছে।'}catch(e){}}else{dl(f,f.name);mark();$('xm').textContent='এই ব্রাউজারে শেয়ার সুবিধা নেই, তাই ফাইল নামানো হয়েছে।'}};
+$('bo').onclick=()=>dl(new Blob([JSON.stringify(ORD,null,1)],{type:'application/json'}),'orders-'+today()+'.json');
+const sN=v=>String(v??''),dt=v=>isNaN(new Date(v))?new Date().toISOString():new Date(v).toISOString();
+const cOrd=o=>({id:sN(o.id).slice(0,40),date:dt(o.date),design:sN(o.design),size:sN(o.size),qty:sN(o.qty||'১'),nm:sN(o.nm),cn:sN(o.cn),ph:sN(o.ph).replace(/\D/g,''),ad:sN(o.ad),zone:sN(o.zone),total:Math.max(0,+o.total||0),has:!!o.has,status:ST[o.status]?o.status:'new',note:sN(o.note),gift:sN(o.gift).slice(0,200),nc:sN(o.nc).slice(0,20),...(o.fin&&typeof o.fin==='object'?{fin:cFinO(o.fin)}:{})});
+const cProd=(p,i)=>{const id=sN(p.id).replace(/[^\w-]/g,'')||'p'+Date.now().toString(36)+i,im=/^data:image\/(jpeg|png|webp);base64,/.test(sN(p.imgData))?p.imgData:'',o={id,name:sN(p.name).slice(0,80),cat:sN(p.cat).trim().slice(0,40),desc:sN(p.desc).slice(0,400),prices:[0,1].map(k=>Math.max(0,+(p.prices||[])[k]||0)),image:/^images\/[\w.-]+$/.test(sN(p.image))?p.image:(im?'images/'+id+'.jpg':''),style:(+p.style||0)%6,active:p.active!==false,cost:cCost(p.cost)};if(im)o.imgData=im;return o};
+const cSet=x=>{x=x||{};const d=DEF.settings;return{wa:sN(x.wa||d.wa).replace(/\D/g,'')||d.wa,phone:sN(x.phone||d.phone),tagline:sN(x.tagline||d.tagline).slice(0,80),fb:/^https?:\/\//i.test(sN(x.fb))?x.fb:'',ig:/^https?:\/\//i.test(sN(x.ig))?x.ig:'',tt:/^https?:\/\//i.test(sN(x.tt))?x.tt:'',gform:/^https?:\/\//i.test(sN(x.gform))?x.gform:'',ship:(v=>[v,v])(Math.max(0,+((x.ship||d.ship)[1]||(x.ship||d.ship)[0])||0)),sizes:[0,1].map(k=>sN((x.sizes||d.sizes)[k]||d.sizes[k]))}};
+const cRev=r=>{const im=/^data:image\/(jpeg|png|webp);base64,/.test(sN(r.imgData))?r.imgData:'',o={id:sN(r.id).replace(/[^\w-]/g,'')||'rv'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),n:sN(r.n).slice(0,80),t:sN(r.t).slice(0,500),r:Math.min(5,Math.max(1,+r.r||5))};if(r.sample)o.sample=true;if(im)o.imgData=im;else if(/^images\/reviews\/[\w.-]+$/.test(sN(r.img)))o.img=sN(r.img);return o};
+let PEND=null;
+$('rs').onchange=async e=>{const fl=e.target.files[0];e.target.value='';if(!fl)return;try{let j=JSON.parse(await fl.text());if(fl.size>25e6)throw 0;let vf=null;if(Array.isArray(j))j={orders:j};else{vf=await verify(j);if(vf===false){$('xm').textContent='⚠ ফাইলটি নষ্ট বা বদলানো হয়েছে, তাই রিস্টোর করা হয়নি।';return}}if(!j||typeof j!=='object'||(!Array.isArray(j.orders)&&!j.site))throw 0;
+ const os=(j.orders||[]).filter(o=>o&&o.id),nw=os.filter(o=>!ORD.some(x=>x.id===sN(o.id))).length,ps=j.site&&Array.isArray(j.site.products)?j.site.products:[],np=ps.filter(p=>!DATA.products.some(x=>x.id===sN(p.id))).length;
+ PEND={orders:j.orders?os:undefined,site:j.site||null};
+ $('rpi').innerHTML=(vf===true?'<p style="color:#7bd88f">✓ ফাইল যাচাই সফল</p>':vf===null?'<p>ফাইলে যাচাই-কোড নেই (পুরনো ব্যাকআপ)।</p>':'')+(os.length<ORD.length?'<p style="color:#e0a050">⚠ ফাইলে বর্তমানের চেয়ে কম অর্ডার আছে। প্রতিস্থাপন করলে নতুন অর্ডার হারাবে; মার্জ নিরাপদ।</p>':'')+`<p>ফাইলে অর্ডার: <b>${bn(os.length)}</b> (নতুন <b>${bn(nw)}</b>)</p>`+(j.site?`<p>ফাইলে ফ্রেম: <b>${bn(ps.length)}</b> (নতুন <b>${bn(np)}</b>) · সেটিংস ও রিভিউসহ</p>`:'<p>এই ফাইলে শুধু অর্ডার আছে।</p>')+(j.date?`<p>ব্যাকআপের তারিখ: ${bn(new Date(j.date).toLocaleDateString('en-GB'))}</p>`:'')+`<p>এখন আছে: অর্ডার ${bn(ORD.length)}, ফ্রেম ${bn(DATA.products.length)}</p>`;$('rp').hidden=false;$('rp').scrollIntoView({behavior:'smooth'})}catch(x){$('xm').textContent='ফাইলটি সঠিক ব্যাকআপ নয়।'}};
+async function applyR(mode){const p=PEND;if(!p)return;if(mode==='rep'){const f=await mkBk();dl(f,'before-restore-'+f.name)}
+ const O=(p.orders||[]).map(cOrd),st=p.site;
+ if(mode==='rep'){if(p.orders)ORD=O;if(st)DATA={settings:cSet(st.settings),products:(st.products||[]).map(cProd),reviews:(st.reviews||[]).map(cRev).filter(r=>r.n&&r.t),fin:cFin(st.fin)}}
+ else{O.forEach(o=>{if(!ORD.some(x=>x.id===o.id))ORD.push(o)});if(st){if($('rsset').checked&&st.settings){DATA.settings=cSet(st.settings);if(st.fin)DATA.fin=cFin(st.fin)}(st.products||[]).map(cProd).forEach(q=>{if(!DATA.products.some(x=>x.id===q.id))DATA.products.push(q)});(st.reviews||[]).map(cRev).forEach(r=>{if(r.n&&r.t&&!DATA.reviews.some(x=>x.n===r.n&&x.t===r.t))DATA.reviews.push(r)})}}
+ ORD.sort((a,b)=>b.date.localeCompare(a.date));norm();const ok=saveO()&&saveD();PEND=null;$('rp').hidden=true;fillS();rO();rP();rR();bkw();$('xm').textContent=ok?'রিস্টোর সম্পন্ন হয়েছে।':'রিস্টোর আংশিক হয়েছে (স্টোরেজ পূর্ণ?)। ছোট ছবি ব্যবহার করুন।'}
+$('rm').onclick=()=>applyR('merge');$('rrep').onclick=()=>{if(confirm('বর্তমান অর্ডার ও ফ্রেমের জায়গায় ফাইলের ডেটা বসবে। নিশ্চিত?'))applyR('rep')};$('rc').onclick=()=>{PEND=null;$('rp').hidden=true};
+$('rd').onclick=async()=>{if(confirm('অপ্রকাশিত সব পরিবর্তন মুছে সাইটের বর্তমান ডেটা লোড হবে। আগে একটি ব্যাকআপ নিজে থেকে নামবে। নিশ্চিত?')){const f=await mkBk();dl(f,'before-reset-'+f.name);localStorage.removeItem('fs_draft');const old=DATA;DATA=JSON.parse(JSON.stringify(await loadData()));DATA.fin=old.fin;norm();DATA.products.forEach(p=>{const q=old.products.find(x=>x.id===p.id);if(q)p.cost=q.cost});saveD();fillS();rP();rR();bkw()}};
+/* report */
+let RNG='7';
+const dkey=d=>new Date(d).toLocaleDateString('en-CA');
+function inR(o,r){if(!r||r==='all')return true;const d=new Date(o.date),n=new Date();if(r==='0')return dkey(d)===dkey(n);if(r==='m')return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();return n-d<=(+r)*864e5}
+function cust(){const m={};ORD.forEach(o=>{const k=String(o.ph).replace(/\D/g,'').slice(-10)||o.cn,c=m[k]||(m[k]={cn:o.cn,ph:o.ph,n:0,sp:0,last:o.date});c.n++;if(o.status==='delivered')c.sp+=o.total;if(o.date>c.last){c.last=o.date;c.cn=o.cn}});return Object.values(m).sort((a,b)=>b.sp-a.sp||b.n-a.n)}
+function rRep(){
+ $('rch').innerHTML=[['0','আজ'],['7','৭ দিন'],['30','৩০ দিন'],['m','এই মাস'],['all','সব']].map(([k,v])=>`<button class="chip${RNG===k?' on':''}" data-r="${k}">${v}</button>`).join('');
+ const rl=ORD.filter(o=>inR(o,RNG)),act=rl.filter(o=>o.status!=='cancelled'),del=rl.filter(o=>o.status==='delivered'),pend=rl.filter(o=>['new','confirmed','shipped'].includes(o.status)),tot=a=>a.reduce((x,o)=>x+o.total,0);
+ const ag=agg(del),pg=agg(pend);$('rst').innerHTML=`<div><b>${bn(rl.length)}</b>মোট অর্ডার</div><div><b>${pt(ag.profit)}</b>মোট ${ag.profit<0?'ক্ষতি':'লাভ'} (ডেলিভারড)</div><div><b>${tk(tot(del))}</b>ডেলিভারড বিক্রি</div><div><b>${tk(tot(pend))}</b>চলমান অর্ডারের টাকা</div><div><b>${bn(del.length)}</b>ডেলিভারড</div><div><b>${bn(rl.filter(o=>o.status==='cancelled').length)}</b>বাতিল</div><div><b>${tk(del.length?Math.round(tot(del)/del.length):0)}</b>গড় অর্ডার মূল্য</div>`;
+ const rr=(l,v,c)=>`<div class="rw${c||''}"><span>${l}</span><span>${v}</span></div>`;$('rpl').innerHTML=`<h3 style="color:var(--gold2);margin-bottom:6px">💰 লাভ-ক্ষতির হিসাব (ডেলিভারড অর্ডার)</h3><div class="pl"><div>${rr('ফ্রেমের বিক্রয়মূল্য',tk(ag.sale))}${rr('ডেলিভারি চার্জ (ক্রেতার কাছ থেকে)',tk(ag.dch))}${rr('মোট বিক্রি',tk(ag.rev),' big')}</div><div>${rr('ফ্রেম ক্রয়মূল্য',tk(ag.buy))}${rr('প্রিন্ট খরচ',tk(ag.print))}${rr('প্যাকেজিং খরচ',tk(ag.pack))}${rr('অন্যান্য খরচ',tk(ag.other))}${rr('কুরিয়ার খরচ (আসল)',tk(ag.dcost))}${rr('মোট খরচ',tk(ag.cost),' big')}</div></div>${rr('মোট '+(ag.profit<0?'ক্ষতি':'লাভ'),pt(ag.profit),' big'+(ag.profit<0?' neg':''))}${rr('লাভের হার (বিক্রির %)',ag.rev?bn((ag.profit/ag.rev*100).toFixed(1))+'%':'—')}${rr('চলমান অর্ডারে সম্ভাব্য লাভ ('+bn(pend.length)+'টি)',pt(pg.profit))}<p class="hint">বাতিল অর্ডার হিসাবে ধরা হয় না। অর্ডারের কার্ডে \"লাভ-ক্ষতির হিসাব\" খুলে ওই অর্ডারের যেকোনো সংখ্যা বদলানো যায়।</p>`;
+ const days=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-13+i);return{k:dkey(d),l:bn(d.getDate()),v:0}});
+ ORD.filter(o=>o.status!=='cancelled').forEach(o=>{const x=days.find(d=>d.k===dkey(o.date));if(x)x.v+=o.total});
+ const mx=Math.max(1,...days.map(d=>d.v));
+ $('rbar').innerHTML=days.map(d=>`<div title="${tk(d.v)}"><i style="height:${Math.round(d.v/mx*88)}%"></i><span>${d.l}</span></div>`).join('');
+ const t={};act.forEach(o=>{const k=o.design||'অন্যান্য',x=t[k]||(t[k]={q:0,v:0,pr:0});x.q+=qn(o);x.v+=o.total;x.pr+=F(o).profit});
+ $('rtop').innerHTML=Object.entries(t).sort((a,b)=>b[1].v-a[1].v).slice(0,6).map(([k,x],i)=>`<div class="rw"><span>${bn(i+1)}. ${esc(k)}</span><span>${bn(x.q)}টি · ${tk(x.v)} · লাভ ${pt(x.pr)}</span></div>`).join('')||'<p class="hint">এই সময়ে কোনো অর্ডার নেই।</p>';
+ rCu()}
+function rCu(){const q=$('cq').value.toLowerCase();$('clist').innerHTML=cust().filter(c=>!q||(c.cn+c.ph).toLowerCase().includes(q)).slice(0,60).map(c=>`<div class="rw"><span><b>${esc(c.cn)}</b>${c.n>1?' <small style="color:var(--gold2)">· পুরনো ক্রেতা</small>':''}<br><small><a href="tel:${esc(c.ph)}">${bn(esc(c.ph))}</a></small></span><span>${bn(c.n)}টি অর্ডার<br><small>${tk(c.sp)}</small></span></div>`).join('')||'<p class="hint">কোনো ক্রেতা নেই।</p>'}
+$('rch').onclick=e=>{if(e.target.dataset.r){RNG=e.target.dataset.r;rRep()}};$('cq').oninput=rCu;
+$('ccsv').onclick=()=>{const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',h=['cn','ph','n','sp','last'];dl(new Blob(['\ufeff'+[h.join(',')].concat(cust().map(c=>h.map(k=>q(c[k])).join(','))).join('\n')],{type:'text/csv'}),'customers.csv')};
+if(sessionStorage.fsin)start();
+</script></body></html>
