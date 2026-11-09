@@ -56,7 +56,7 @@ body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 </style></head><body>
 <header><div class="wrap nav"><span class="logo"><img src="./images/logo-sm.png" alt="FS Frames লোগো" width="44" height="39"><span><b>FS</b> অ্যাডমিন</span></span><span><a class="btn sm" href="index.html" target="_blank">সাইট দেখুন</a> <button class="btn sm" id="out" hidden>লগআউট</button></span></div></header>
 <div class="wrap">
-<div id="login" class="box"><h2 class="gold" style="font-size:24px" id="lt"></h2><fieldset><label class="l" for="pw">পাসওয়ার্ড</label><input type="password" id="pw" autocomplete="current-password"></fieldset><button class="btn fill" id="lg" style="width:100%">প্রবেশ করুন</button><p class="msg" id="lm"></p><p class="hint">এই পাসওয়ার্ড শুধু এই ব্রাউজারে সংরক্ষিত। কাজ শেষে লগআউট করুন।</p></div>
+<div id="login" class="box"><h2 class="gold" style="font-size:24px" id="lt">অ্যাডমিন লগইন</h2><form id="admin-login-form"><fieldset><label class="l" for="admin-email">অ্যাডমিন ইমেইল</label><input type="email" id="admin-email" autocomplete="username" required></fieldset><fieldset><label class="l" for="pw">পাসওয়ার্ড</label><input type="password" id="pw" autocomplete="current-password" required></fieldset><button class="btn fill" id="lg" style="width:100%" type="submit">প্রবেশ করুন</button></form><p class="msg" id="lm" role="alert"></p><p class="hint">Firebase Authentication দিয়ে লগইন করুন। অনুমোদিত Admin অ্যাকাউন্ট ছাড়া প্রবেশ করা যাবে না।</p></div>
 <div id="app" hidden>
 <div class="tabs" role="tablist"><button data-t="t1" class="on"><span>📦</span>অর্ডার</button><button data-t="t5"><span>📊</span>রিপোর্ট</button><button data-t="t2"><span>🖼</span>ফ্রেম</button><button data-t="t3"><span>⚙</span>সেটিংস</button><button data-t="t4"><span>💾</span>ব্যাকআপ</button></div>
 
@@ -152,10 +152,8 @@ function toast(t){let d=$('toast');if(!d){d=document.createElement('div');d.id='
 const cpy=async t=>{try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}};
 /* login */
 $('lt').textContent=L('fs_pw','')?'অ্যাডমিন লগইন':'নতুন পাসওয়ার্ড সেট করুন';
-const start=async()=>{DATA=L('fs_draft',null)||JSON.parse(JSON.stringify(await loadData()));norm();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;sessionStorage.fsin=1;fillS();rO();rP();rR();bkw();try{navigator.storage.persist()}catch(e){}};
-$('lg').onclick=async()=>{const v=$('pw').value,s=L('fs_pw','');if(!s){if(v.length<6){$('lm').textContent='কমপক্ষে ৬ অক্ষর দিন।';return}Sv('fs_pw',await hash(v));start()}else if(await hash(v)===s)start();else $('lm').textContent='পাসওয়ার্ড ভুল।'};
-$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('lg').click()});
-$('out').onclick=()=>{delete sessionStorage.fsin;location.reload()};
+const start=async()=>{DATA=L('fs_draft',null)||JSON.parse(JSON.stringify(await loadData()));norm();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;fillS();rO();rP();rR();bkw();try{navigator.storage.persist()}catch(e){}};
+window.addEventListener('fs-admin-authenticated',start);
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button,.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(b.dataset.t).classList.add('on');if(b.dataset.t==='t5')rRep();scrollTo(0,0)});
 const bump=()=>{try{localStorage.setItem('fs_chg',String((+localStorage.getItem('fs_chg')||0)+1))}catch(e){}if(DATA)bkw()};
 const sc=()=>+localStorage.getItem('fs_sitechg')||0,saveD=()=>{const r=Sv('fs_draft',DATA);if(r){bump();try{localStorage.setItem('fs_sitechg',String(sc()+1))}catch(e){}}return r},saveO=()=>{const r=Sv('fs_orders',ORD);if(r)bump();return r};
@@ -332,5 +330,5 @@ function rRep(){
 function rCu(){const q=$('cq').value.toLowerCase();$('clist').innerHTML=cust().filter(c=>!q||(c.cn+c.ph).toLowerCase().includes(q)).slice(0,60).map(c=>`<div class="rw"><span><b>${esc(c.cn)}</b>${c.n>1?' <small style="color:var(--gold2)">· পুরনো ক্রেতা</small>':''}<br><small><a href="tel:${esc(c.ph)}">${bn(esc(c.ph))}</a></small></span><span>${bn(c.n)}টি অর্ডার<br><small>${tk(c.sp)}</small></span></div>`).join('')||'<p class="hint">কোনো ক্রেতা নেই।</p>'}
 $('rch').onclick=e=>{if(e.target.dataset.r){RNG=e.target.dataset.r;rRep()}};$('cq').oninput=rCu;
 $('ccsv').onclick=()=>{const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',h=['cn','ph','n','sp','last'];dl(new Blob(['\ufeff'+[h.join(',')].concat(cust().map(c=>h.map(k=>q(c[k])).join(','))).join('\n')],{type:'text/csv'}),'customers.csv')};
-if(sessionStorage.fsin)start();
+
 </script></body></html>
