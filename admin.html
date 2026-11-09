@@ -331,4 +331,4 @@ function rCu(){const q=$('cq').value.toLowerCase();$('clist').innerHTML=cust().f
 $('rch').onclick=e=>{if(e.target.dataset.r){RNG=e.target.dataset.r;rRep()}};$('cq').oninput=rCu;
 $('ccsv').onclick=()=>{const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',h=['cn','ph','n','sp','last'];dl(new Blob(['\ufeff'+[h.join(',')].concat(cust().map(c=>h.map(k=>q(c[k])).join(','))).join('\n')],{type:'text/csv'}),'customers.csv')};
 
-</script></body></html>
+</script><script type="module" src="./js/admin-auth.js"></script></body></html>
