@@ -56,7 +56,7 @@ body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 </style></head><body>
 <header><div class="wrap nav"><span class="logo"><img src="./images/logo-sm.png" alt="FS Frames লোগো" width="44" height="39"><span><b>FS</b> অ্যাডমিন</span></span><span><a class="btn sm" href="index.html" target="_blank">সাইট দেখুন</a> <button class="btn sm" id="out" hidden>লগআউট</button></span></div></header>
 <div class="wrap">
-<div id="login" class="box"><h2 class="gold" style="font-size:24px" id="lt"></h2><fieldset><label class="l" for="pw">পাসওয়ার্ড</label><input type="password" id="pw" autocomplete="current-password"></fieldset><button class="btn fill" id="lg" style="width:100%">প্রবেশ করুন</button><p class="msg" id="lm"></p><p class="hint">এই পাসওয়ার্ড শুধু এই ব্রাউজারে সংরক্ষিত। কাজ শেষে লগআউট করুন।</p></div>
+<div id="login" class="box"><h2 class="gold" style="font-size:24px" id="lt">অ্যাডমিন লগইন</h2><form id="admin-login-form"><fieldset><label class="l" for="admin-email">অ্যাডমিন ইমেইল</label><input type="email" id="admin-email" autocomplete="username" required></fieldset><fieldset><label class="l" for="pw">পাসওয়ার্ড</label><input type="password" id="pw" autocomplete="current-password" required></fieldset><button class="btn fill" id="lg" style="width:100%" type="submit">প্রবেশ করুন</button></form><p class="msg" id="lm" role="alert"></p><p class="hint">Firebase Authentication দিয়ে লগইন করুন। অনুমোদিত Admin অ্যাকাউন্ট ছাড়া প্রবেশ করা যাবে না।</p></div>
 <div id="app" hidden>
 <div class="tabs" role="tablist"><button data-t="t1" class="on"><span>📦</span>অর্ডার</button><button data-t="t5"><span>📊</span>রিপোর্ট</button><button data-t="t2"><span>🖼</span>ফ্রেম</button><button data-t="t3"><span>⚙</span>সেটিংস</button><button data-t="t4"><span>💾</span>ব্যাকআপ</button></div>
 
@@ -112,7 +112,7 @@ body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 <fieldset><legend>কুরিয়ারকে আসলে কত দিতে হয় (শুধু লাভের হিসাবে লাগে, সাইটে যায় না)</legend><input type="number" id="cs1" min="0" inputmode="numeric" placeholder="সারাদেশ – কুরিয়ারকে আসলে কত দিতে হয়"><p class="hint">খালি রাখলে ক্রেতার দেওয়া ডেলিভারি চার্জকেই কুরিয়ার খরচ ধরা হবে (ডেলিভারি থেকে লাভ/ক্ষতি শূন্য)।</p></fieldset>
 <div class="two"><fieldset><label class="l" for="a1">সাইজ ১ এর নাম</label><input type="text" id="a1"></fieldset><fieldset><label class="l" for="a2">সাইজ ২ এর নাম</label><input type="text" id="a2"></fieldset></div>
 <button class="btn fill" id="ss">সেটিংস সংরক্ষণ</button><p class="msg" id="sm"></p>
-<fieldset style="margin-top:20px"><legend>পাসওয়ার্ড বদলান</legend><input type="password" id="np" placeholder="নতুন পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"><button class="btn sm" id="cp" style="margin-top:10px" type="button">বদলান</button></fieldset></form><div class="box" style="margin-top:16px"><h3 style="color:var(--gold2)">ক্রেতার রিভিউ (অনুমোদন)</h3><p class="hint" style="margin-bottom:12px">ক্রেতা WhatsApp বা Google Form-এ রিভিউ ও ছবি পাঠালে যাচাই করে এখানে যোগ করুন — এখানে যোগ করা মানেই অনুমোদন। তারপর 'সাইটে প্রকাশ' থেকে ZIP নামিয়ে আপলোড করলে রিভিউ সাইটে আসবে। 'নমুনা' চিহ্নিত রিভিউ সাইটে কখনো দেখানো হয় না।</p><div id="rvl"></div><div class="two"><input type="text" id="rn" placeholder="নাম, এলাকা"><select id="rr"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select></div><textarea id="rt" placeholder="রিভিউ" style="margin:10px 0"></textarea><label class="l" for="rimg">ক্রেতার ছবি (ঐচ্ছিক)</label><input type="file" id="rimg" accept="image/*" style="margin:6px 0 10px;width:100%;color:var(--mute)"><div id="rpv" style="width:90px;margin-bottom:10px"></div><button class="btn sm" id="ra" type="button">রিভিউ যোগ করুন</button></div></div>
+</form><div class="box" style="margin-top:16px"><h3 style="color:var(--gold2)">ক্রেতার রিভিউ (অনুমোদন)</h3><p class="hint" style="margin-bottom:12px">ক্রেতা WhatsApp বা Google Form-এ রিভিউ ও ছবি পাঠালে যাচাই করে এখানে যোগ করুন — এখানে যোগ করা মানেই অনুমোদন। তারপর 'সাইটে প্রকাশ' থেকে ZIP নামিয়ে আপলোড করলে রিভিউ সাইটে আসবে। 'নমুনা' চিহ্নিত রিভিউ সাইটে কখনো দেখানো হয় না।</p><div id="rvl"></div><div class="two"><input type="text" id="rn" placeholder="নাম, এলাকা"><select id="rr"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select></div><textarea id="rt" placeholder="রিভিউ" style="margin:10px 0"></textarea><label class="l" for="rimg">ক্রেতার ছবি (ঐচ্ছিক)</label><input type="file" id="rimg" accept="image/*" style="margin:6px 0 10px;width:100%;color:var(--mute)"><div id="rpv" style="width:90px;margin-bottom:10px"></div><button class="btn sm" id="ra" type="button">রিভিউ যোগ করুন</button></div></div>
 
 <div class="tab" id="t4">
 <div class="box" style="margin-bottom:16px"><h3 style="color:var(--gold2)">💾 ব্যাকআপ (অর্ডার + ফ্রেম + সেটিংস + রিভিউ)</h3><div id="bks" style="margin:8px 0 14px;color:var(--mute)"></div>
@@ -151,11 +151,9 @@ $('of').innerHTML+=Object.entries(ST).map(([k,v])=>`<option value="${k}">${v}</o
 function toast(t){let d=$('toast');if(!d){d=document.createElement('div');d.id='toast';document.body.appendChild(d)}d.textContent=t;d.className='on';clearTimeout(toast.t);toast.t=setTimeout(()=>d.className='',2200)}
 const cpy=async t=>{try{await navigator.clipboard.writeText(t)}catch(e){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}};
 /* login */
-$('lt').textContent=L('fs_pw','')?'অ্যাডমিন লগইন':'নতুন পাসওয়ার্ড সেট করুন';
-const start=async()=>{DATA=L('fs_draft',null)||JSON.parse(JSON.stringify(await loadData()));norm();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;sessionStorage.fsin=1;fillS();rO();rP();rR();bkw();try{navigator.storage.persist()}catch(e){}};
-$('lg').onclick=async()=>{const v=$('pw').value,s=L('fs_pw','');if(!s){if(v.length<6){$('lm').textContent='কমপক্ষে ৬ অক্ষর দিন।';return}Sv('fs_pw',await hash(v));start()}else if(await hash(v)===s)start();else $('lm').textContent='পাসওয়ার্ড ভুল।'};
-$('pw').addEventListener('keydown',e=>{if(e.key==='Enter')$('lg').click()});
-$('out').onclick=()=>{delete sessionStorage.fsin;location.reload()};
+
+const start=async()=>{DATA=L('fs_draft',null)||JSON.parse(JSON.stringify(await loadData()));norm();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;fillS();rO();rP();rR();bkw();try{navigator.storage.persist()}catch(e){}};
+window.addEventListener('fs-admin-authenticated',start);
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button,.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');$(b.dataset.t).classList.add('on');if(b.dataset.t==='t5')rRep();scrollTo(0,0)});
 const bump=()=>{try{localStorage.setItem('fs_chg',String((+localStorage.getItem('fs_chg')||0)+1))}catch(e){}if(DATA)bkw()};
 const sc=()=>+localStorage.getItem('fs_sitechg')||0,saveD=()=>{const r=Sv('fs_draft',DATA);if(r){bump();try{localStorage.setItem('fs_sitechg',String(sc()+1))}catch(e){}}return r},saveO=()=>{const r=Sv('fs_orders',ORD);if(r)bump();return r};
@@ -259,7 +257,7 @@ $('ss').onclick=()=>{const w=en($('sw').value).replace(/\D/g,'');if(!waOk(w)){$(
  DATA.settings={wa:w,phone:$('sp').value.trim(),fb:$('sf').value.trim(),ig:$('sig').value.trim(),tt:$('stt').value.trim(),gform:$('sgf').value.trim(),tagline:$('stg').value.trim()||DEF.settings.tagline,ship:[+$('z1').value||0,+$('z1').value||0],sizes:[$('a1').value.trim()||'সাইজ ১',$('a2').value.trim()||'সাইজ ২']};
  DATA.fin=cFin({cship:[$('cs1').value===''?'':num($('cs1').value),$('cs1').value===''?'':num($('cs1').value)]});
  if(saveD()){chk();$('sm').textContent='সংরক্ষিত। সাইটে দিতে ZIP নামিয়ে আপলোড করুন।';rP()}};
-$('cp').onclick=async()=>{const v=$('np').value;if(v.length<6){alert('কমপক্ষে ৬ অক্ষর');return}Sv('fs_pw',await hash(v));$('np').value='';alert('পাসওয়ার্ড বদলেছে।')};
+
 function rR(){$('rvl').innerHTML=DATA.reviews.map((r,i)=>`<div class="pc" style="grid-template-columns:1fr auto"><div>${(r.imgData||r.img)?`<img src="${esc(r.imgData||r.img)}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:8px;float:right;margin-left:10px">`:''}<b>${esc(r.n)}</b>${r.sample?' <small style="color:#e0a050">(নমুনা)</small>':''}<div style="color:var(--gold)">${'★'.repeat(r.r)}</div><p style="font-size:15px;color:var(--mute)">${esc(r.t)}</p></div><button class="btn red sm" data-i="${i}">মুছুন</button></div>`).join('')||'<p class="hint">কোনো রিভিউ নেই।</p>'}
 $('rvl').addEventListener('click',e=>{const i=e.target.dataset.i;if(i==null)return;DATA.reviews.splice(+i,1);saveD();rR();chk()});
 let rimgD='';$('rimg').onchange=async e=>{const f=e.target.files[0];if(!f)return;rimgD=await rs(f,640,.72).catch(()=>{alert('এই ছবিটি খোলা যায়নি।');return ''});$('rpv').innerHTML=`<img src="${rimgD}" alt="" style="width:90px;border-radius:8px">`};
@@ -332,5 +330,5 @@ function rRep(){
 function rCu(){const q=$('cq').value.toLowerCase();$('clist').innerHTML=cust().filter(c=>!q||(c.cn+c.ph).toLowerCase().includes(q)).slice(0,60).map(c=>`<div class="rw"><span><b>${esc(c.cn)}</b>${c.n>1?' <small style="color:var(--gold2)">· পুরনো ক্রেতা</small>':''}<br><small><a href="tel:${esc(c.ph)}">${bn(esc(c.ph))}</a></small></span><span>${bn(c.n)}টি অর্ডার<br><small>${tk(c.sp)}</small></span></div>`).join('')||'<p class="hint">কোনো ক্রেতা নেই।</p>'}
 $('rch').onclick=e=>{if(e.target.dataset.r){RNG=e.target.dataset.r;rRep()}};$('cq').oninput=rCu;
 $('ccsv').onclick=()=>{const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"',h=['cn','ph','n','sp','last'];dl(new Blob(['\ufeff'+[h.join(',')].concat(cust().map(c=>h.map(k=>q(c[k])).join(','))).join('\n')],{type:'text/csv'}),'customers.csv')};
-if(sessionStorage.fsin)start();
-</script></body></html>
+
+</script><script type="module" src="./js/admin-auth.js"></script></body></html>
